@@ -1,9 +1,16 @@
 import * as Yup from 'yup';
-import {startOfHour,parseISO, isBefore} from 'date-fns';
+import { startOfHour, parseISO, isBefore } from 'date-fns';
 import Appointment from '../models/Appointment';
 import User from '../models/User';
 
 class AppointmentController {
+  async index(req, res) {
+    const appointment = await Appointment.findAll({
+      where: { user_id: req.userId, canceled_at: null },
+    });
+    return res.json(appointment);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       provider_id: Yup.number().required(),
